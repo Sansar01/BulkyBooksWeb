@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>@(Model.Product.Id!=0 ? "Update" :"Create")</h1>
+<h1>@(Model.Product.Id!=0 ? "Update" :"Create") Product</h1>
 
 <h4>Product</h4>
 <hr />
@@ -12,6 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Upsert" enctype="multipart/form-data">
             <input asp-for="Product.Id" hidden/>
+            <input asp-for="Product.ImageUrl" hidden />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Product.Title" class="control-label"></label>
@@ -53,11 +54,26 @@
                 <input asp-for="Product.Price100" class="form-control" />
                 <span asp-validation-for="Product.Price100" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Product.ImageUrl" class="control-label"></label>
-                <input type="file" class="form-control" />
-                <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
-            </div>
+            @{
+                if(Model.Product.Id!=0)
+                {
+                   
+                    <img src="@Model.Product.ImageUrl" width="100"/>
+                    <div class="form-group">
+                        <label asp-for="Product.ImageUrl" class="control-label"></label>
+                        <input type="file" name="file" value="" class="form-control" />
+                        <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label asp-for="Product.ImageUrl" class="control-label"></label>
+                        <input type="file" name="file" value="" class="form-control" />
+                        <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
+                    </div>
+                }
+            }
             <div class="form-group">
                 <label asp-for="@Model.Product.CategoryId" class="control-label"></label>
                 <select asp-for="@Model.Product.CategoryId" asp-items="@Model.CategoryList" class="form-select border-0 shadow">
@@ -66,7 +82,14 @@
                 <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group mx-2">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                @if (Model.Product.Id != 0)
+                {
+                    <button type="submit" class="btn btn-primary form-control">Update</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary form-control">Create</button>
+                }
             </div>
         </form>
     </div>
