@@ -19,22 +19,31 @@ namespace Bulky.DataAccess.Repository
             _context = context;
             this.dbSet = _context.Set<T>();
             //_context.categories == dbset
+            _context.Products.Include(u => u.Category).Include(u=>u.CategoryId);
         }
         public void Add(T entity)
         {
             dbSet.Add(entity);
         }
 
-        public T Get(System.Linq.Expressions.Expression<Func<T, bool>> filter)
+        public T Get(System.Linq.Expressions.Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        //category, coverType
+        public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }))
+                {
+                    query = query.Include(includeProp);
+                }
+            }
             return query.ToList();
         }
 

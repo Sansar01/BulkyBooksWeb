@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Upsert">Create New</a>
 </p>
-<table class="table">
+<table id="tblData" class="table">
     <thead>
         <tr>
             <th>
@@ -40,7 +40,7 @@
                 @Html.DisplayNameFor(model => model.ImageUrl)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryId)
+                @Html.DisplayNameFor(model => model.Category.Name)
             </th>
             <th></th>
         </tr>
@@ -76,7 +76,7 @@
                     @Html.DisplayFor(modelItem => item.ImageUrl)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CategoryId)
+                    @Html.DisplayFor(modelItem => item.Category.Name)
                 </td>
             <td>
                 <a asp-action="Upsert" asp-route-id="@item.Id">Edit</a> |
@@ -87,3 +87,7 @@
 }
     </tbody>
 </table>
+
+@section Scripts{
+    <script src="~/js/product.js"></script>
+}

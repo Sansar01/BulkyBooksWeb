@@ -21,7 +21,7 @@ namespace BulkyBooksWeb.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            List<Product> obj = _unitOfWork.Product.GetAll().ToList();
+            List<Product> obj = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
             //IEnumerable<SelectListItem> CategoryList = (IEnumerable<SelectListItem>)_unitOfWork.Category.GetAll().ToList();\
 
             return View(obj);
@@ -63,7 +63,7 @@ namespace BulkyBooksWeb.Areas.Admin.Controllers
                 {
                     string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     string productPath = Path.Combine(wwwRootPath, @"image\product");
-
+  
                     if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
                     {
                         //delete the old image
@@ -209,5 +209,37 @@ namespace BulkyBooksWeb.Areas.Admin.Controllers
             _unitOfWork.save();
             return RedirectToAction("Index");
         }
+
+        #region Api calls
+
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            List<Product> obj = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+            return Json(new {data = obj});
+        }
+
+        public IActionResult Deletes(int id)
+        {
+            var productToBeDeleted = _unitOfWork.Product.Get(u=>u.Id == id);    
+             if(productToBeDeleted == null)
+            {
+                 return Json(new {success = false, message = "Error while deleting"});
+            }
+
+            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, productToBeDeleted.ImageUrl.TrimStart('\\'));
+
+            if (System.IO.File.Exists(oldImagePath))
+            {
+                System.IO.File.Delete(oldImagePath);
+            }
+
+            _unitOfWork.Product.Remove(productToBeDeleted);
+            _unitOfWork.save();
+
+            return Json(new { success = true, message = "Delete successfull" });
+        }
+
+        #endregion
     }
 }
