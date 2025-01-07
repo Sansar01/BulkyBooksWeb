@@ -23,25 +23,35 @@
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
+                <input asp-for="Input.Name" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.Name">Name</label>
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
                 <input asp-for="Input.StreetAddress" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.StreetAddress">Password</label>
+                <label asp-for="Input.StreetAddress">StreetAddress</label>
                 <span asp-validation-for="Input.StreetAddress" class="text-danger"></span>
 
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.City" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.StreetAddress">Password</label>
-                <span asp-validation-for="Input.StreetAddress" class="text-danger"></span>
+                <label asp-for="Input.City">City</label>
+                <span asp-validation-for="Input.City" class="text-danger"></span>
 
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.PhoneNumber">Password</label>
+                <input asp-for="Input.State" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.State">State</label>
+                <span asp-validation-for="Input.State" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="new-password" aria-required="true" placeholder="PhoneNumber" />
+                <label asp-for="Input.PhoneNumber">PhoneNumber</label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.PostalCode" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.PostalCode">Password</label>
+                <input asp-for="Input.PostalCode" class="form-control" autocomplete="new-password" aria-required="true" placeholder="PostalCode" />
+                <label asp-for="Input.PostalCode">PostalCode</label>
                 <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
@@ -50,7 +60,7 @@
                 </select>
             </div>
             <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="ConfirmPassword" />
                 <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
