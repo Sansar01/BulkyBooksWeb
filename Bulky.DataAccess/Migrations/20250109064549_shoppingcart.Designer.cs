@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bulky.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250108113731_addshoppingcart")]
-    partial class addshoppingcart
+    [Migration("20250109064549_shoppingcart")]
+    partial class shoppingcart
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -266,11 +266,11 @@ namespace Bulky.DataAccess.Migrations
 
             modelBuilder.Entity("Bulky.Models.Models.ShoppingCart", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ShoppingCartId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShoppingCartId"));
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
@@ -282,7 +282,7 @@ namespace Bulky.DataAccess.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("ShoppingCartId");
 
                     b.HasIndex("ApplicationUserId");
 
