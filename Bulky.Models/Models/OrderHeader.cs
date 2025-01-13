@@ -49,6 +49,7 @@ namespace Bulky.Models.Models
         [Required]
         public string PostalCode { get; set; }
 
-
+        [Required]
+        public string Name { get; set; }
     }
 }
