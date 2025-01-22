@@ -1,0 +1,70 @@
+﻿@model OrderVM
+
+@{
+    ViewData["Title"] = "Index";
+    //var orderHeader = Model.OrderHeader.ToList();
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="">Create New</a>
+</p>
+<table  class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderHeader.First().Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderHeader.First().Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderHeader.First().PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderHeader.First().ApplicationUser.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderHeader.First().OrderStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderHeader.First().OrderTotal)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderHeader)
+        {
+            <tr>
+                <td>
+                     @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ApplicationUser.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderStatus)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderTotal)
+                </td>
+                @* <td>
+                    <a asp-action="" asp-route-id="@item.OrderHeader.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.OrderHeader.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.OrderHeader.Id">Delete</a>
+                </td> *@
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* @section Scripts {
+    <script src="~/js/product.js"></script>
+} *@
