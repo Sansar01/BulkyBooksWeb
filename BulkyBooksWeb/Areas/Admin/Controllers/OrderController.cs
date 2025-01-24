@@ -19,7 +19,7 @@ namespace BulkyBooksWeb.Areas.Admin.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index(string? status)
-        {
+         {
             OrderVM orderVM = new()
             {
                 OrderHeader = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList(),
@@ -45,6 +45,13 @@ namespace BulkyBooksWeb.Areas.Admin.Controllers
             }
 
             return View(orderVM);
+        }
+
+        public IActionResult Details(int orderId)
+        {
+            OrderHeader orderheader = _unitOfWork.OrderHeader.Get(u => u.Id == orderId, includeProperties: "ApplicationUser");
+
+            return View(orderheader);
         }
 
         //#region Api calls
