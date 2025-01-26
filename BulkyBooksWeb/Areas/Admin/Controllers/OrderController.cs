@@ -1,4 +1,5 @@
-﻿using Bulky.DataAccess.Repository.IRepository;
+﻿using Azure.Core;
+using Bulky.DataAccess.Repository.IRepository;
 using Bulky.Models.Models;
 using Bulky.Models.ViewModels;
 using Bulky.Utilty;
@@ -47,11 +48,17 @@ namespace BulkyBooksWeb.Areas.Admin.Controllers
             return View(orderVM);
         }
 
-        public IActionResult Details(int orderId)
+        public IActionResult Details(int Id)
         {
-            OrderHeader orderheader = _unitOfWork.OrderHeader.Get(u => u.Id == orderId, includeProperties: "ApplicationUser");
 
-            return View(orderheader);
+            OrderVM orderVM = new() { 
+                
+              OrderHeader = new List<OrderHeader> { _unitOfWork.OrderHeader.Get(u => u.Id == Id, includeProperties: "ApplicationUser") },
+              OrderDetail = _unitOfWork.OrderDetail.GetAll(u=>u.OrderHeader.Id == Id,includeProperties:"Product")
+
+            };
+
+            return View(orderVM);
         }
 
         //#region Api calls
