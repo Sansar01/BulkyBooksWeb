@@ -3,8 +3,11 @@ using Bulky.DataAccess.Repository.IRepository;
 using Bulky.Models.Models;
 using Bulky.Models.ViewModels;
 using Bulky.Utilty;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
+using System.Security.Claims;
 
 namespace BulkyBooksWeb.Areas.Admin.Controllers
 {
@@ -12,63 +15,161 @@ namespace BulkyBooksWeb.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public OrderController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
+        //[BindProperty]
+        //public OrderVM OrderVM { get; set; }
+
+        [BindProperty]
+        public OrderHeader OrderHeader { get; set; }
+
+        public OrderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _webHostEnvironment = webHostEnvironment;
         }
-        public IActionResult Index(string? status)
-         {
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        //public IActionResult Index(string? status)
+        //{
+        //    OrderVM = new()
+        //    {
+        //        OrderHeader = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList(),
+        //        OrderDetail = new List<OrderDetail>()
+        //    };
+
+        //    switch (status)
+        //    {
+        //        case "pending":
+        //            OrderVM.OrderHeader = OrderVM.OrderHeader.Where(u => u.PaymentStatus == SD.PaymentStatusPending);
+        //            break;
+        //        case "inprocess":
+        //            OrderVM.OrderHeader = OrderVM.OrderHeader.Where(u => u.OrderStatus == SD.StatusInProcess);
+        //            break;
+        //        case "completed":
+        //            OrderVM.OrderHeader = OrderVM.OrderHeader.Where(u => u.OrderStatus == SD.StatusShipped);
+        //            break;
+        //        case "approved":
+        //            OrderVM.OrderHeader = OrderVM.OrderHeader.Where(u => u.OrderStatus == SD.StatusApproved);
+        //            break;
+        //        default:
+        //            break;
+        //    }
+
+        //    return View(OrderVM);
+        //}
+
+        public IActionResult Details(int orderId)
+        {
+
             OrderVM orderVM = new()
             {
-                OrderHeader = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList(),
-                OrderDetail = new List<OrderDetail>()
+
+                OrderHeader = new List<OrderHeader> { _unitOfWork.OrderHeader.Get(u => u.Id == orderId, includeProperties: "ApplicationUser") },
+                OrderDetail = _unitOfWork.OrderDetail.GetAll(u => u.OrderHeader.Id == orderId, includeProperties: "Product")
+
             };
+
+            return View(orderVM);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
+        public IActionResult UpdateOrderDetail()
+        {
+
+            var orderHeaderFromDb = _unitOfWork.OrderHeader.Get(u => u.Id == OrderHeader.Id);
+
+            orderHeaderFromDb.Name = OrderHeader.Name;
+            orderHeaderFromDb.PhoneNumber = OrderHeader.PhoneNumber;
+            orderHeaderFromDb.Street = OrderHeader.Street;
+            orderHeaderFromDb.City = OrderHeader.City;
+            orderHeaderFromDb.State = OrderHeader.State;
+            orderHeaderFromDb.PostalCode = OrderHeader.PostalCode;
+
+            if (!string.IsNullOrEmpty(OrderHeader.Carrier))
+            {
+                orderHeaderFromDb.Carrier = OrderHeader.Carrier;
+            }
+
+            if (!string.IsNullOrEmpty(OrderHeader.TrackingNumber))
+            {
+                orderHeaderFromDb.TrackingNumber = OrderHeader.TrackingNumber;
+            }
+
+            _unitOfWork.OrderHeader.Update(orderHeaderFromDb);
+            _unitOfWork.save();
+
+            TempData["Success"] = "Order Details Updated Successfully.";
+
+            return RedirectToAction(nameof(Details), new { orderId = orderHeaderFromDb.Id });
+
+            return View();
+        }
+
+        #region Api calls
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetAll(string status)
+        {
+            // IEnumerable<OrderHeader> obj = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList();
+
+            OrderVM OrderVM = new()
+            {
+                OrderHeader = new List<OrderHeader>(),
+                //OrderDetail = new List<OrderDetail>()
+            };
+
+            if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+            {
+                OrderVM = new()
+                {
+                    OrderHeader = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList()
+                };
+            }
+            else
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                OrderVM = new()
+                {
+                    OrderHeader = _unitOfWork.OrderHeader.GetAll(u =>u.ApplicationUserId == userId, includeProperties: "ApplicationUser")
+                };
+            }
 
             switch (status)
             {
                 case "pending":
-                    orderVM.OrderHeader = orderVM.OrderHeader.Where(u => u.PaymentStatus == SD.PaymentStatusPending);
+                    OrderVM.OrderHeader = OrderVM.OrderHeader.Where(u => u.PaymentStatus == SD.PaymentStatusPending);
                     break;
                 case "inprocess":
-                    orderVM.OrderHeader = orderVM.OrderHeader.Where(u => u.OrderStatus == SD.StatusInProcess);
+                    OrderVM.OrderHeader = OrderVM.OrderHeader.Where(u => u.OrderStatus == SD.StatusInProcess);
                     break;
                 case "completed":
-                    orderVM.OrderHeader = orderVM.OrderHeader.Where(u => u.OrderStatus == SD.StatusShipped);
+                    OrderVM.OrderHeader = OrderVM.OrderHeader.Where(u => u.OrderStatus == SD.StatusShipped);
                     break;
                 case "approved":
-                    orderVM.OrderHeader = orderVM.OrderHeader.Where(u => u.OrderStatus == SD.StatusApproved);
+                    OrderVM.OrderHeader = OrderVM.OrderHeader.Where(u => u.OrderStatus == SD.StatusApproved);
                     break;
                 default:
                     break;
             }
 
-            return View(orderVM);
+
+            return Json(new { data = OrderVM.OrderHeader });
         }
 
-        public IActionResult Details(int Id)
+        [HttpPost]
+        [Authorize(Roles =SD.Role_Admin + "," + SD.Role_Employee)]
+        public IActionResult StartProcessing()
         {
-
-            OrderVM orderVM = new() { 
-                
-              OrderHeader = new List<OrderHeader> { _unitOfWork.OrderHeader.Get(u => u.Id == Id, includeProperties: "ApplicationUser") },
-              OrderDetail = _unitOfWork.OrderDetail.GetAll(u=>u.OrderHeader.Id == Id,includeProperties:"Product")
-
-            };
-
-            return View(orderVM);
+            _unitOfWork.OrderHeader.UpdateStatus(OrderHeader.Id,SD.StatusInProcess);
+            return View();
         }
-
-        //#region Api calls
-
-        //[HttpGet]
-        //public IActionResult GetAll()
-        //{
-        //    List<OrderHeader> obj = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList();
-        //    return Json(new { data = obj });
-        //}
 
         //public IActionResult Deletes(int id)
         //{
@@ -91,6 +192,6 @@ namespace BulkyBooksWeb.Areas.Admin.Controllers
         //    return Json(new { success = true, message = "Delete successfull" });
         //}
 
-        //#endregion
+        #endregion
     }
 }
