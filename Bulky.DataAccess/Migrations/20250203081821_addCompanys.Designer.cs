@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bulky.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250113054026_addnamecolumn")]
-    partial class addnamecolumn
+    [Migration("20250203081821_addCompanys")]
+    partial class addCompanys
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -209,6 +209,9 @@ namespace Bulky.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SessionId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ShippingDate")
                         .HasColumnType("datetime2");
 
@@ -284,7 +287,7 @@ namespace Bulky.DataAccess.Migrations
                         {
                             Id = 1,
                             Author = "Billy Spark",
-                            CategoryId = 2,
+                            CategoryId = 1,
                             Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
                             ISBN = "SWD9999001",
                             ImageUrl = "",
@@ -326,7 +329,7 @@ namespace Bulky.DataAccess.Migrations
                         {
                             Id = 4,
                             Author = "Abby Muscles",
-                            CategoryId = 3,
+                            CategoryId = 2,
                             Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
                             ISBN = "WS3333333301",
                             ImageUrl = "",
@@ -340,7 +343,7 @@ namespace Bulky.DataAccess.Migrations
                         {
                             Id = 5,
                             Author = "Ron Parker",
-                            CategoryId = 4,
+                            CategoryId = 1,
                             Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
                             ISBN = "SOTJ1111111101",
                             ImageUrl = "",
@@ -354,7 +357,7 @@ namespace Bulky.DataAccess.Migrations
                         {
                             Id = 6,
                             Author = "Laura Phantom",
-                            CategoryId = 5,
+                            CategoryId = 2,
                             Description = "Praesent vitae sodales libero. Praesent molestie orci augue, vitae euismod velit sollicitudin ac. Praesent vestibulum facilisis nibh ut ultricies.\r\n\r\nNunc malesuada viverra ipsum sit amet tincidunt. ",
                             ISBN = "FOT000000001",
                             ImageUrl = "",

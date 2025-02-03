@@ -7,20 +7,11 @@
 namespace Bulky.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCompanyDemoData : Migration
+    public partial class addCompanys : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "PhoneNumber",
-                table: "Companies",
-                type: "nvarchar(max)",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int",
-                oldNullable: true);
-
             migrationBuilder.InsertData(
                 table: "Companies",
                 columns: new[] { "Id", "City", "Name", "PhoneNumber", "PostalCode", "State", "StreetAddress" },
@@ -49,15 +40,6 @@ namespace Bulky.DataAccess.Migrations
                 table: "Companies",
                 keyColumn: "Id",
                 keyValue: 3);
-
-            migrationBuilder.AlterColumn<int>(
-                name: "PhoneNumber",
-                table: "Companies",
-                type: "int",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
         }
     }
 }
