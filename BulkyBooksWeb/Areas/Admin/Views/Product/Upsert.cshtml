@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Upsert" enctype="multipart/form-data">
             <input asp-for="Product.Id" hidden/>
-            <input asp-for="Product.ImageUrl" hidden />
+            @* <input asp-for="Product.ImageUrl" hidden /> *@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Product.Title" class="control-label"></label>
@@ -55,23 +55,23 @@
                 <span asp-validation-for="Product.Price100" class="text-danger"></span>
             </div>
             @{
-                if(Model.Product.Id!=0)
-                {
+                // if(Model.Product.Id!=0)
+                // {
                    
-                    <img src="@Model.Product.ImageUrl" width="100"/>
-                    <div class="form-group">
-                        <label asp-for="Product.ImageUrl" class="control-label"></label>
-                        <input type="file" name="file" value="" class="form-control" />
-                        <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
-                    </div>
-                }
-                else
-                {
-                    <div class="form-group">
-                        <label asp-for="Product.ImageUrl" class="control-label"></label>
-                        <input type="file" name="file" value="" class="form-control" />
-                        <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
-                    </div>
+                //     <img src="@Model.Product.ImageUrl" width="100"/>
+                //     <div class="form-group">
+                //         <label asp-for="Product.ImageUrl" class="control-label"></label>
+                //         <input type="file" name="file" value="" class="form-control" />
+                //         <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
+                //     </div>
+                // }
+                // else
+                // {
+                //     <div class="form-group">
+                //         <label asp-for="Product.ImageUrl" class="control-label"></label>
+                //         <input type="file" name="file" value="" class="form-control" />
+                //         <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
+                //     </div>
                 }
             }
             <div class="form-group">
