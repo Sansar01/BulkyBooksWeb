@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Upsert" enctype="multipart/form-data">
             <input asp-for="Product.Id" hidden/>
-            @* <input asp-for="Product.ImageUrl" hidden /> *@
+            
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Product.Title" class="control-label"></label>
@@ -55,23 +55,23 @@
                 <span asp-validation-for="Product.Price100" class="text-danger"></span>
             </div>
             @{
-                // if(Model.Product.Id!=0)
-                // {
+                if(Model.Product.Id!=0)
+                {
                    
-                //     <img src="@Model.Product.ImageUrl" width="100"/>
-                //     <div class="form-group">
-                //         <label asp-for="Product.ImageUrl" class="control-label"></label>
-                //         <input type="file" name="file" value="" class="form-control" />
-                //         <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
-                //     </div>
-                // }
-                // else
-                // {
-                //     <div class="form-group">
-                //         <label asp-for="Product.ImageUrl" class="control-label"></label>
-                //         <input type="file" name="file" value="" class="form-control" />
-                //         <span asp-validation-for="Product.ImageUrl" class="text-danger"></span>
-                //     </div>
+                    <img src="@Model.Product.ProductImages" width="100"/>
+                    <div class="form-group">
+                        <label asp-for="Product.ProductImages" class="control-label"></label>
+                        <input type="file" name="files" value="" class="form-control" multiple/>
+                        <span asp-validation-for="Product.ProductImages" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label asp-for="Product.ProductImages" class="control-label"></label>
+                        <input type="file" name="files" value="" class="form-control" multiple/>
+                        <span asp-validation-for="Product.ProductImages" class="text-danger"></span>
+                    </div>
                 }
             }
             <div class="form-group">
@@ -80,6 +80,21 @@
                     <option disabled selected>Select Category</option>
                 </select>
                 <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="col-2">
+                @if (Model.Product.ProductImages != null)
+                {
+                    foreach (var image in Model.Product.ProductImages)
+                    {
+                        <div class="border p-1 m-2 text-center">
+                            <img src="@image.ImageUrl" width="100%"
+                                 style="border-radius:5px; border:1px solid #bbb9b9" />
+                            <a asp-action="DeleteImage" class="btn btn-danger" asp-route-imageId="@image.Id">
+                                <i class="bi bi-trash-fill"></i> Delete
+                            </a>
+                        </div>
+                    }
+                }
             </div>
             <div class="form-group mx-2">
                 @if (Model.Product.Id != 0)

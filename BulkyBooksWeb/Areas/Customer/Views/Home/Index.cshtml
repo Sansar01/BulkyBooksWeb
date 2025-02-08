@@ -44,9 +44,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.ProductImages)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -81,9 +81,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Category.Name)
                 </td>
-                @* <td>
-                    @Html.DisplayFor(modelItem => item.ImageUrl)
-                </td> *@
+                <td>
+                    @if(item.ProductImages!=null && item.ProductImages.Count>0)
+                    {
+                        <img src="@item.ProductImages.FirstOrDefault().ImageUrl"/>
+                    }
+                </td>
                 <td>
                     @* <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>  *@
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
